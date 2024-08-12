@@ -1,0 +1,164 @@
+Planner (to chat_manager):
+
+Great, let's dive into the requirements and break them down into actionable steps for Coder to implement. Here’s our plan:
+
+### Step-by-Step Plan
+1. **Read `routers.csv` to get device details.**
+    - Parse the CSV file to extract hostname, IP address, username, password, and device type.
+2. **Connect to each device and collect BGP configuration.**
+    - Use a library like `netmiko` to connect to devices and run the command `show running router bgp`.
+    - Save BGP configuration data to a respective device-named file.
+3. **Compare the collected BGP configuration against best practices.**
+    - Implement functions to compare the collected configuration with each best practice.
+    - Summarize and save the key differences.
+4. **Generate recommendations to comply with best practices.**
+    - Based on the differences found, generate the required changes for each device.
+    - Save recommendations into a report.
+5. **Combine all tasks into a single script (`main.py`) with proper documentation.**
+
+### Detailed Coding Instructions for Coder
+
+**Imports and Dependencies:**
+```python
+import csv
+import netmiko
+from netmiko import ConnectHandler
+```
+
+**Step 1: Read `routers.csv` to get device details**
+- Use Python’s built-in CSV reader to parse the file.
+
+**Step 2: Connect to each device and collect BGP configuration**
+- Use `netmiko` to establish SSH connections to each router and execute the required commands.
+
+**Step 3: Compare BGP configuration against best practices**
+- Write functions for each best practice.
+    - E.g., Function to verify BGP synchronization, neighbor log changes, etc.
+
+**Step 4: Generate recommendations to comply with best practices**
+- Based on the differences, generate the necessary configuration changes.
+
+**Step 5: Save final report and script documentation**
+
+Here’s the detailed logical structure and low-level logic for each step:
+
+1. **Reading `routers.csv`:**
+```pseudo
+# Open the CSV file
+# Read the first row for headers: hostname, ip_address, username, password, device_type
+# Iterate over remaining rows to gather device details
+```
+
+2. **Connecting to each device and collecting BGP configuration:**
+```pseudo
+# For each device details from CSV:
+#   Establish an SSH connection using Netmiko
+#   Send 'show running router bgp' command
+#   Save the output to a file named after the device hostname
+```
+
+3. **Comparing BGP configuration against best practices:**
+```pseudo
+# Define comparison functions for each best practice
+#   Compare the device's BGP configuration with the best practice requirements
+#   Save summaries of key differences
+```
+
+4. **Generating recommendations:**
+```pseudo
+# Based on comparison results:
+#   Generate configuration commands that need to be applied to each device
+#   Save these recommendations to a final report file
+```
+
+5. **Combining steps and saving the script (main.py):**
+```pseudo
+# Combine all steps
+# Add appropriate logging, error handling, and documentation
+```
+
+### Initial Collaborated Script Outline for `main.py`
+
+```python
+# main.py
+import csv
+from netmiko import ConnectHandler
+
+# Step 1: Read the CSV file
+def read_csv(file):
+    devices = []
+    with open(file, mode='r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            devices.append(row)
+    return devices
+
+# Step 2: Collect BGP configuration from each device
+def collect_bgp_config(device):
+    connection = ConnectHandler(
+        device_type=device['device_type'], 
+        host=device['ip_address'], 
+        username=device['username'], 
+        password=device['password']
+    )
+    bgp_output = connection.send_command('show running router bgp')
+    with open(f"{device['hostname']}_bgp.txt", 'w') as file:
+        file.write(bgp_output)
+    connection.disconnect()
+
+# Step 3: Compare configuration with best practices
+def compare_bgp_config(device):
+    with open(f"{device['hostname']}_bgp.txt", 'r') as file:
+        bgp_config = file.read()
+    differences = []
+
+    # Check each best practice
+    if 'synchronization' in bgp_config:
+        differences.append("Synchronization is enabled.")
+    if 'log neighbor changes' not in bgp_config:
+        differences.append("Neighbor changes are not logged.")
+    if 'no auto-summary' not in bgp_config:
+        differences.append("No auto summary is not enabled.")
+    # Continue for the remaining best practices...
+    
+    return differences
+
+# Step 4: Generate recommendations
+def generate_recommendations(differences, device):
+    recommendations = []
+    for diff in differences:
+        if "Synchronization is enabled." in diff:
+            recommendations.append("no synchronization")
+        if "Neighbor changes are not logged." in diff:
+            recommendations.append("log neighbor changes")
+        if "No auto summary is not enabled." in diff:
+            recommendations.append("no auto-summary")
+        # Continue for the remaining best practices...
+
+    with open('recommendations.txt', 'a') as file:
+        file.write(f"Recommendations for {device['hostname']}:\n")
+        for rec in recommendations:
+            file.write(f"{rec}\n")
+
+# Main execution
+if __name__ == "__main__":
+    devices = read_csv('routers.csv')
+    
+    for device in devices:
+        collect_bgp_config(device)
+        differences = compare_bgp_config(device)
+        generate_recommendations(differences, device)
+```
+
+### Next Steps for Coder
+1. Implement the script as per the plan.
+2. Add additional best practice checks in `compare_bgp_config`.
+3. Execute the script and validate it works as intended.
+4. Make necessary adjustments based on Critic and Reporter feedback.
+
+### Reporter
+Ensure detailed documentation and how to run the script, along with sample output files, are included.
+
+Once the script is fully implemented and documented, it will be ready for execution and validation. Let’s proceed with coding!
+
+--------------------------------------------------------------------------------

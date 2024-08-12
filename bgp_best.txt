@@ -1,0 +1,21 @@
+
+There are two sets of rules for best practices: global and per neighbor.
+Both sets must be checked.
+
+** Global configuration rules (not per neighbor): 
+G1: Synchronization is disabled
+G2: Log neighbor changes
+G3: Auto-summary is disabled
+G4: BGP router ID uses one of the loopback addresses.
+
+** Per neighbor configuration rules:
+N1: Remove private AS in all external BGP configurations. 
+N2: Enforce maximum number of prefixes received from a BGP neighbor
+N3: Set next-hop-self for internal BGP neighboring sessions. 
+N4: Enable BGP Time to Live (TTL) security check
+N5: BGP neighbor authentication is configured with password or cryptography
+N6: Neighbor filtering is configured with access list or filter list
+
+** Note:
+An external BGP neighbor is one that has a different AS number than the local router unless in a confederation.
+An internal BGP neighbor is one that has the same AS number as the local router unless in a confederation.

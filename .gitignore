@@ -1,0 +1,4 @@
+.env
+.cache
+.ipynb_checkpoints
+tmp_dir
