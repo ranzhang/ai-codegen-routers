@@ -1,4 +1,4 @@
-# Automated software development with AI agents
+# Automated networking script development with AI agents
 
 A typical software development project may involve a number of iterative tasks, such as gathering requirements, designing the architecture, breaking down the project into units, writing and debuggin code, writing and performing unit tests, writing and performing system tests, documentation. Collaborative AI agents are showing potentials in accomplishing these tasks automatically with little human intervention, especially for projects with limited scope and complexity. 
 
